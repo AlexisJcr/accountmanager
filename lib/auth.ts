@@ -5,6 +5,8 @@ import { db, loginTable } from "./db/schema"
 import { eq } from "drizzle-orm"
 import bcrypt from "bcryptjs"
 
+export const runtime = 'nodejs';
+
 //Secret key pour JWT (à mettre dans les variables d'environnement en production)
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "energix-secret-key-in-prod")
 

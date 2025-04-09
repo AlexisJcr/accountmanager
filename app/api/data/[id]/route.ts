@@ -3,7 +3,9 @@ import { db, dataTable } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { getCurrentUser } from "@/lib/auth"
 import { verifyA2FCode } from "@/lib/a2f"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
+
+export const runtime = 'nodejs';
 
 // Mettre à jour une donnée
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {

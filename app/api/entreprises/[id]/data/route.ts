@@ -3,7 +3,9 @@ import { db, dataTable, entrepriseTable } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { getCurrentUser } from "@/lib/auth"
 import { verifyA2FCode } from "@/lib/a2f"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
+
+export const runtime = 'nodejs';
 
 // Récupérer les données d'une entreprise
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
