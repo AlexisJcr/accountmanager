@@ -41,7 +41,7 @@ export async function setAuthCookie(userId: number, role: string) {
     name: "auth-token",
     value: token,
     httpOnly: true,
-    path: "/accstorage",
+    path: "/",
     secure: process.env.NODE_ENV === "production",
     maxAge: 30 * 60,
   })
@@ -85,12 +85,17 @@ export async function authMiddleware(request: NextRequest) {
 
 // Obtenir l'utilisateur actuel à partir du token
 export async function getCurrentUser() {
+  try{
   const cookieStore = await cookies()
   const token = cookieStore.get("auth-token")?.value
+
+  console.log("Token trouvé:", token ? "Oui" : "Non")
 
   if (!token) return null
 
   const payload = await verifyToken(token)
+
+  console.log("Payload du token:", payload)
 
   if (!payload || !payload.userId) {
     return null
@@ -113,4 +118,8 @@ export async function getCurrentUser() {
     identifiant: user[0].identifiant,
     role: user[0].role,
   }
+} catch (error) {
+  console.error("Erreur lors de la récupération de l'utilisateur:", error)
+  return null
+}
 }

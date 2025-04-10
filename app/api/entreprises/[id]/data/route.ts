@@ -10,7 +10,9 @@ export const runtime = 'nodejs';
 // Récupérer les données d'une entreprise
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const entrepriseId = Number.parseInt(params.id)
+    const { id } = await params
+
+    const entrepriseId = Number.parseInt(id)
 
     if (isNaN(entrepriseId)) {
       return NextResponse.json({ error: "ID d'entreprise invalide" }, { status: 400 })
@@ -46,7 +48,9 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 // Ajouter une nouvelle donnée
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const entrepriseId = Number.parseInt(params.id)
+    const { id } = await params
+
+    const entrepriseId = Number.parseInt(id)
     const { nom, prenom, typeInfo, identifiant, motDePasse, a2fCode } = await request.json()
 
     // Vérifier les données requises
@@ -56,6 +60,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     // Vérifier si l'utilisateur est authentifié
     const currentUser = await getCurrentUser()
+    console.log('Utilisateur actuel:', currentUser)
 
     if (!currentUser) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 })

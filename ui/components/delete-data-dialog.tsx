@@ -41,6 +41,7 @@ export function DeleteDataDialog({ data, onClose }: DeleteDataDialogProps) {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           a2fCode,
         }),

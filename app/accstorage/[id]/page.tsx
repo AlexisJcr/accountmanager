@@ -11,13 +11,16 @@ export default async function EnterprisePage({
 }: {
   params: { id: string }
 }) {
+  // Attendre la résolution des params
+  const { id } = await params
+
   const user = await getCurrentUser()
 
   if (!user) {
     return notFound()
   }
 
-  const entrepriseId = Number.parseInt(params.id)
+  const entrepriseId = Number.parseInt(id)
 
   if (isNaN(entrepriseId)) {
     return notFound()

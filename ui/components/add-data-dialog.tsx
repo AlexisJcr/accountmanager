@@ -54,6 +54,7 @@ export function AddDataDialog({ entrepriseId, onClose }: AddDataDialogProps) {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           nom,
           prenom,

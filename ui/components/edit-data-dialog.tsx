@@ -56,6 +56,7 @@ export function EditDataDialog({ data, entrepriseId, onClose }: EditDataDialogPr
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           nom,
           prenom,
