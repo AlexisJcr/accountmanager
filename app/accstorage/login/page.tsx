@@ -6,7 +6,7 @@ export default async function LoginPage() {
   const entreprises = await db.select().from(entrepriseTable)
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="absolute inset-0 z-0 filter blur-sm opacity-30">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-8">
           {entreprises.map((entreprise) => (

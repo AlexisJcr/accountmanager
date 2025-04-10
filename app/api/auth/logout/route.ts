@@ -1,10 +1,18 @@
-import { NextResponse } from "next/server"
-import { clearAuthCookie } from "@/lib/auth"
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
-export async function POST() {
-  clearAuthCookie()
+export async function POST(request: Request) {
+  const cookieStore = await cookies();
+  
+  cookieStore.set({
+    name: "auth-token",
+    value: "",
+    expires: new Date(0),
+    path: "/",
+  });
 
-  return NextResponse.json({
-    success: true,
-  })
+  cookieStore.delete("auth-token");
+
+  return NextResponse.redirect(new URL("/", request.url), { status: 302 });
 }
+

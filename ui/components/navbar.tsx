@@ -89,7 +89,7 @@ export function Navbar({ title, showBackButton = false, backUrl = "/", icon }: N
   const IconComponent = icon === "Building" ? Building : icon === "Database" ? Database : null
 
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-sm">
+    <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           {IconComponent && <IconComponent className="h-6 w-6 text-green-600" />}
