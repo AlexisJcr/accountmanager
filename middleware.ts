@@ -1,10 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { verifyToken } from "./lib/auth"
+import { verifyTokenEdge } from "./lib/auth-edge" // <-- nouveau import
 
 export async function middleware(request: NextRequest) {
-  // Vérifier si la route est protégée
   if (request.nextUrl.pathname.startsWith("/accstorage")) {
-    // Exclure la page de login et les API d'authentification
     if (
       request.nextUrl.pathname === "/accstorage/login" ||
       request.nextUrl.pathname === "/api/auth/login" ||
@@ -13,14 +11,13 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next()
     }
 
-    // Vérifier le token d'authentification
     const token = request.cookies.get("auth-token")?.value
 
     if (!token) {
       return NextResponse.redirect(new URL("/accstorage/login", request.url))
     }
 
-    const payload = await verifyToken(token)
+    const payload = await verifyTokenEdge(token)
 
     if (!payload) {
       return NextResponse.redirect(new URL("/accstorage/login", request.url))
@@ -28,8 +25,4 @@ export async function middleware(request: NextRequest) {
   }
 
   return NextResponse.next()
-}
-
-export const config = {
-  matcher: ["/accstorage/:path*", "/api/:path*"],
 }
