@@ -6,7 +6,11 @@ import { Navbar } from "@/ui/components/navbar"
 import { DataTable } from "@/ui/components/data-table"
 import { AddDataButton } from "@/ui/components/add-data-button"
 
-export default async function EnterprisePage({ params }: { params: { id: string } }) {
+export default async function EnterprisePage({
+  params,
+}: {
+  params: { id: string }
+}) {
   const user = await getCurrentUser()
 
   if (!user) {
