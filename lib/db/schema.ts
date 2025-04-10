@@ -24,7 +24,7 @@ export const loginTable = pgTable("login", {
 
 export const a2fTable = pgTable("a2f", {
   id: serial("id").primaryKey(),
-  code: varchar("code", { length: 10 }).notNull(),
+  code: varchar("code", { length: 100 }).notNull(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 

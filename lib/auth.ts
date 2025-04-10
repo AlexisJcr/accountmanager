@@ -62,9 +62,6 @@ export async function verifyCredentials(identifiant: string, motDePasse: string)
   for (const user of users) {
     const isIdentifiantValid = await bcrypt.compare(identifiant, user.identifiant)
     const isPasswordValid = await bcrypt.compare(motDePasse, user.motDePasse)
-    console.log(user.identifiant, user.motDePasse);
-    console.log("isIdentifiantValid:", isIdentifiantValid)
-    console.log("isPasswordValid:", isPasswordValid)
 
     if (isIdentifiantValid && isPasswordValid) {
       return user

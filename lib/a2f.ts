@@ -10,9 +10,13 @@ export async function verifyA2FCode(code: string): Promise<boolean> {
     }
 
     const storedHash = a2fCodes[0].code
+    console.log("Code entré:", code)
+    console.log("Hash stocké:", storedHash)
+    
     return await bcrypt.compare(code, storedHash)
   } catch (error) {
     console.error("Erreur lors de la vérification du code A2F:", error)
     return false
   }
 }
+
