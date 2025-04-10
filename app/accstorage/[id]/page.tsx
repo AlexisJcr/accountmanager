@@ -37,7 +37,7 @@ export default async function EnterprisePage({
   const data = await db.select().from(dataTable).where(eq(dataTable.entrepriseId, entrepriseId))
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col bg-gray-100">
       <Navbar title={entreprise[0].nom} showBackButton={true} backUrl="/accstorage" icon="Building" />
 
       <main className="flex-1 container mx-auto py-8 px-4">
