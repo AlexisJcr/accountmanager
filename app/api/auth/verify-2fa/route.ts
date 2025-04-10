@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { db, a2fTable } from "@/lib/db/schema"
+import { verifyA2FCode } from "@/lib/a2f" // Assure-toi d'importer la fonction
 import { setAuthCookie } from "@/lib/auth"
 
 export async function POST(request: NextRequest) {
@@ -10,10 +10,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Utilisateur et code requis" }, { status: 400 })
     }
 
-    // Vérifier le code A2F
-    const a2fCodes = await db.select().from(a2fTable)
+    // Vérifier le code A2F avec la fonction verifyA2FCode
+    const validCode = await verifyA2FCode(code)
 
-    if (a2fCodes.length === 0 || a2fCodes[0].code !== code) {
+    if (!validCode) {
       return NextResponse.json({ error: "Code de vérification incorrect" }, { status: 401 })
     }
 
