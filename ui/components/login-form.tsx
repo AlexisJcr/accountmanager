@@ -32,7 +32,7 @@ export function LoginForm() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-
+    console.log(identifiant, motDePasse);
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",

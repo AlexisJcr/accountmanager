@@ -57,19 +57,21 @@ export async function clearAuthCookie() {
 
 //Vérif de identifiants de connexion
 export async function verifyCredentials(identifiant: string, motDePasse: string) {
-  const user = await db.select().from(loginTable).where(eq(loginTable.identifiant, identifiant)).limit(1)
+  const users = await db.select().from(loginTable)
 
-  if (user.length === 0) {
-    return null
+  for (const user of users) {
+    const isIdentifiantValid = await bcrypt.compare(identifiant, user.identifiant)
+    const isPasswordValid = await bcrypt.compare(motDePasse, user.motDePasse)
+    console.log(user.identifiant, user.motDePasse);
+    console.log("isIdentifiantValid:", isIdentifiantValid)
+    console.log("isPasswordValid:", isPasswordValid)
+
+    if (isIdentifiantValid && isPasswordValid) {
+      return user
+    }
   }
 
-  const isPasswordValid = await bcrypt.compare(motDePasse, user[0].motDePasse)
-
-  if (!isPasswordValid) {
-    return null
-  }
-
-  return user[0]
+  return null
 }
 
 // Middleware pour vérifier l'authentification
