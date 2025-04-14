@@ -10,6 +10,8 @@ import {
 } from "@/ui/design-system/toast"
 import { useToast } from "@/ui/components/use-toast"
 
+import { X } from "lucide-react"
+
 export function Toaster() {
   const { toasts } = useToast()
 
@@ -22,7 +24,12 @@ export function Toaster() {
             {description && <ToastDescription>{description}</ToastDescription>}
           </div>
           {action}
-          <ToastClose />
+          <ToastClose asChild>
+            <button className="absolute right-2 top-2 rounded-md p-1 text-foreground/50 transition-opacity hover:text-foreground focus:outline-none">
+              <X className="h-4 w-4" />
+            </button>
+          </ToastClose>
+
         </Toast>
       ))}
       <ToastViewport />
