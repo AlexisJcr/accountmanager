@@ -31,8 +31,9 @@ export function EnterpriseGrid({ entreprises }: EnterpriseGridProps) {
                 <p className="text-center text-primary text-sm">{entreprise.adresse}</p>
                 <p className="text-center text-gray-700 text-sm mt-1">{entreprise.telephone}</p>
               </Link>
+              
               <div className="relative">
-                <div className="absolute top-0 right-0 flex space-x-1">
+                <div className="absolute top-0 right-0 flex items-ce space-x-1 mb-2">
                   <Button
                     variant="default"
                     size="icon"
@@ -42,7 +43,7 @@ export function EnterpriseGrid({ entreprises }: EnterpriseGridProps) {
                       setEditingEnterprise(entreprise)
                     }}
                   >
-                    <Edit className="h-3 w-3" />
+                    <Edit className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="default"
@@ -53,7 +54,7 @@ export function EnterpriseGrid({ entreprises }: EnterpriseGridProps) {
                       setDeletingEnterprise(entreprise)
                     }}
                   >
-                    <Trash2 className="h-3 w-3" />
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
