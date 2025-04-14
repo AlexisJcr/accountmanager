@@ -18,7 +18,7 @@ export function EnterpriseGrid({ entreprises }: EnterpriseGridProps) {
   const [deletingEnterprise, setDeletingEnterprise] = useState<Entreprise | null>(null)
 
   return (
-    <>
+    <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {entreprises.map((entreprise) => (
           <Card key={entreprise.id} className="hover:shadow-lg transition-shadow h-full">
@@ -55,18 +55,17 @@ export function EnterpriseGrid({ entreprises }: EnterpriseGridProps) {
                 <p className="text-center text-gray-600 dark:text-gray-400 text-sm">{entreprise.adresse}</p>
                 <p className="text-center text-gray-500 dark:text-gray-500 text-sm mt-1">{entreprise.telephone}</p>
               </Link>
+              {editingEnterprise && (
+                <EditEnterpriseDialog entreprise={editingEnterprise} onClose={() => setEditingEnterprise(null)} />
+              )}
+
+              {deletingEnterprise && (
+                <DeleteEnterpriseDialog entreprise={deletingEnterprise} onClose={() => setDeletingEnterprise(null)} />
+              )}
             </CardContent>
           </Card>
         ))}
       </div>
-
-      {editingEnterprise && (
-        <EditEnterpriseDialog entreprise={editingEnterprise} onClose={() => setEditingEnterprise(null)} />
-      )}
-
-      {deletingEnterprise && (
-        <DeleteEnterpriseDialog entreprise={deletingEnterprise} onClose={() => setDeletingEnterprise(null)} />
-      )}
-    </>
+    </div>
   )
 }
