@@ -85,14 +85,10 @@ export function Navbar({ title, showBackButton = false, backUrl = "/", icon }: N
     }
   }, [])
 
-  // Rendre l'icône appropriée
-  const IconComponent = icon === "Building" ? Building : icon === "Database" ? Database : null
-
   return (
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          {IconComponent && <IconComponent className="h-6 w-6 text-green-600" />}
           <h1 className="text-xl font-bold">{title}</h1>
         </div>
 
