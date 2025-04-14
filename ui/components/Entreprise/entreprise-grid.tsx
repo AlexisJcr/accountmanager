@@ -22,44 +22,46 @@ export function EnterpriseGrid({ entreprises }: EnterpriseGridProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {entreprises.map((entreprise) => (
           <Card key={entreprise.id} className="hover:shadow-lg transition-shadow h-full">
-            <CardContent className="flex flex-col items-center justify-center p-6 h-full">
-              <div className="relative">
-                <Building className={`h-12 w-12 mb-4`} style={{ color: entreprise.couleur || "#22c55e" }} />
-              </div>
+          <CardContent className="flex flex-col items-center justify-between p-6 h-full">
+            <div className="flex flex-col items-center">
+              <Building
+                className="h-12 w-12 mb-4"
+                style={{ color: entreprise.couleur || "#22c55e" }}
+              />
               <Link href={`/accstorage/${entreprise.id}`} className="w-full text-center">
                 <h2 className="text-xl font-semibold mb-2">{entreprise.nom}</h2>
                 <p className="text-center text-primary text-sm">{entreprise.adresse}</p>
                 <p className="text-center text-gray-700 text-sm mt-1">{entreprise.telephone}</p>
               </Link>
+            </div>
+        
+            <div className="mt-4 flex justify-center space-x-2">
+              <Button
+                variant="default"
+                size="icon"
+                className="h-6 w-6"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setEditingEnterprise(entreprise)
+                }}
+              >
+                <Edit className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="default"
+                size="icon"
+                className="h-6 w-6"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setDeletingEnterprise(entreprise)
+                }}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
               
-              <div className="relative">
-                <div className="absolute top-0 right-0 flex items-ce space-x-1 mb-2">
-                  <Button
-                    variant="default"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setEditingEnterprise(entreprise)
-                    }}
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="default"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setDeletingEnterprise(entreprise)
-                    }}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          </CardContent>
+        </Card>
         ))}
       </div>
       {editingEnterprise && (
