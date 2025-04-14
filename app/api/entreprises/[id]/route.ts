@@ -9,7 +9,6 @@ import { sql } from "drizzle-orm"
 import { useToast } from "@/hooks/use-toast"
 
 export const runtime = "nodejs"
-const { toast } = useToast()
 
 //=== DETAILS ENTREPRISE ===//
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
@@ -161,13 +160,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
         { status: 409 },
       )
     }
-
-    toast({
-      title: "Erreur",
-      description: "Impossible de supprimer l'entreprise car des données y sont liées",
-      variant: "destructive",
-    })
-    
+  
 
     
 

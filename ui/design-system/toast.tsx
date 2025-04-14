@@ -68,23 +68,15 @@ const ToastClose = React.forwardRef<
   const Comp = asChild ? "span" : "button"
   return (
     <ToastPrimitives.Close
-      ref={ref}
-      asChild={asChild}
-      className={cn(
-        !asChild && "absolute right-2 top-2 rounded-md p-1 text-foreground/50 transition-opacity hover:text-foreground focus:outline-none",
-        className,
-      )}
-      toast-close=""
-      {...props}
-    >
-      {asChild ? (
-        <Comp className="absolute right-2 top-2 rounded-md p-1 text-foreground/50 transition-opacity hover:text-foreground focus:outline-none">
-          <X className="h-4 w-4" />
-        </Comp>
-      ) : (
-        <X className="h-4 w-4" />
-      )}
-    </ToastPrimitives.Close>
+  ref={ref}
+  className={cn(
+    "absolute right-2 top-2 rounded-md p-1 text-foreground/70 transition-opacity hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+    className
+  )}
+  {...props}
+>
+  <X className="h-4 w-4" />
+</ToastPrimitives.Close>
   )
 })
 ToastClose.displayName = ToastPrimitives.Close.displayName
