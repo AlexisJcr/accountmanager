@@ -28,13 +28,13 @@ export function EnterpriseGrid({ entreprises }: EnterpriseGridProps) {
               </div>
               <Link href={`/accstorage/${entreprise.id}`} className="w-full text-center">
                 <h2 className="text-xl font-semibold mb-2">{entreprise.nom}</h2>
-                <p className="text-center text-gray-600 dark:text-gray-400 text-sm">{entreprise.adresse}</p>
-                <p className="text-center text-gray-500 dark:text-gray-500 text-sm mt-1">{entreprise.telephone}</p>
+                <p className="text-center text-primary text-sm">{entreprise.adresse}</p>
+                <p className="text-center text-gray-700 text-sm mt-1">{entreprise.telephone}</p>
               </Link>
-
-              <div className="absolute top-0 right-0 flex space-x-1">
+              <div className="relative">
+                <div className="absolute top-0 right-0 flex space-x-1">
                   <Button
-                    variant="outline"
+                    variant="default"
                     size="icon"
                     className="h-6 w-6"
                     onClick={(e) => {
@@ -45,7 +45,7 @@ export function EnterpriseGrid({ entreprises }: EnterpriseGridProps) {
                     <Edit className="h-3 w-3" />
                   </Button>
                   <Button
-                    variant="outline"
+                    variant="default"
                     size="icon"
                     className="h-6 w-6"
                     onClick={(e) => {
@@ -56,7 +56,7 @@ export function EnterpriseGrid({ entreprises }: EnterpriseGridProps) {
                     <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
-                
+              </div>
             </CardContent>
           </Card>
         ))}
