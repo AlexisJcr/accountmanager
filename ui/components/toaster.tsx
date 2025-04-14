@@ -1,3 +1,4 @@
+// Toaster.tsx
 "use client"
 
 import {
@@ -24,12 +25,11 @@ export function Toaster() {
             {description && <ToastDescription>{description}</ToastDescription>}
           </div>
           {action}
-          <ToastClose asChild>
+          <ToastClose onClick={() => console.log("Toast closed!")}>
             <button className="absolute right-2 top-2 rounded-md p-1 text-foreground/50 transition-opacity hover:text-foreground focus:outline-none">
               <X className="h-4 w-4" />
             </button>
           </ToastClose>
-
         </Toast>
       ))}
       <ToastViewport />

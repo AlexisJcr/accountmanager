@@ -74,6 +74,7 @@ const ToastClose = React.forwardRef<
     className
   )}
   {...props}
+  onClick={() => console.log("Close clicked")}
 >
   <X className="h-4 w-4" />
 </ToastPrimitives.Close>
