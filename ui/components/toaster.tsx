@@ -1,4 +1,5 @@
 // Toaster.tsx
+
 "use client"
 
 import {
@@ -10,7 +11,6 @@ import {
   ToastViewport,
 } from "@/ui/design-system/toast"
 import { useToast } from "@/ui/components/use-toast"
-
 import { X } from "lucide-react"
 
 export function Toaster() {
@@ -18,19 +18,25 @@ export function Toaster() {
 
   return (
     <ToastProvider>
-      {toasts.map(({ id, title, description, action, ...props }) => (
-        <Toast key={id} {...props}>
-          <div className="grid gap-1">
-            {title && <ToastTitle>{title}</ToastTitle>}
-            {description && <ToastDescription>{description}</ToastDescription>}
-          </div>
-          {action}
-          <ToastClose onClick={() => console.log("Toast closed!")}>
-            <button className="absolute right-2 top-2 rounded-md p-1 text-foreground/50 transition-opacity hover:text-foreground focus:outline-none">
-              <X className="h-4 w-4" />
-            </button>
-          </ToastClose>
-        </Toast>
+      {toasts.map(({ id, title, description, variant, open, ...props }) => (
+        open && (
+          <Toast key={id} {...props}>
+            <div className="grid gap-1">
+              {title && <ToastTitle>{title}</ToastTitle>}
+              {description && <ToastDescription>{description}</ToastDescription>}
+            </div>
+
+            <ToastClose
+              onClick={() => {
+                console.log("Toast closed!")
+              }}
+            >
+              <button className="absolute right-2 top-2 rounded-md p-1 text-foreground/50 transition-opacity hover:text-foreground focus:outline-none">
+                <X className="h-4 w-4" />
+              </button>
+            </ToastClose>
+          </Toast>
+        )
       ))}
       <ToastViewport />
     </ToastProvider>
