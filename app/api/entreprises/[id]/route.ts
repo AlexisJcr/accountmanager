@@ -10,7 +10,6 @@ export const runtime = "nodejs"
 
 //=== DETAILS ENTREPRISE ===//
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-  console.log("GET /api/entreprises/[id] with ID:", params.id)
   try {
     const entrepriseId = Number.parseInt(params.id)
 
@@ -38,7 +37,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
 //=== MAJ ENTREPRISE ===//
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-  console.log("PUT /api/entreprises/[id] with ID:", params.id)
   try {
     const entrepriseId = Number.parseInt(params.id)
     const { nom, adresse, telephone, couleur, a2fCode } = await request.json()
@@ -111,7 +109,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 //=== SUPRESSION ENTREPRISE ===//
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-  console.log("DELETE /api/entreprises/[id] with ID:", params.id)
   try {
     const entrepriseId = Number.parseInt(params.id)
     const { a2fCode } = await request.json()

@@ -1,0 +1,133 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from "@/ui/design-system/dialog"
+import { Button } from "@/ui/design-system/button"
+import { useToast } from "@/hooks/use-toast"
+import { A2FVerificationDialog } from "@/ui/components/Auth/a2f-verification-dialog"
+import type { Entreprise } from "@/lib/db/schema"
+
+interface DeleteEnterpriseDialogProps {
+  entreprise: Entreprise
+  onClose: () => void
+}
+
+export function DeleteEnterpriseDialog({ entreprise, onClose }: DeleteEnterpriseDialogProps) {
+  const router = useRouter()
+  const { toast } = useToast()
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [showA2FDialog, setShowA2FDialog] = useState(false)
+  const [authToken, setAuthToken] = useState<string | null>(null)
+
+  const handleDelete = () => {
+    // Ouvrir la boîte de dialogue de vérification A2F
+    setShowA2FDialog(true)
+  }
+
+  const handleA2FVerification = async (a2fCode: string) => {
+    setIsLoading(true)
+
+    try {
+      // Préparer les en-têtes avec le token d'authentification
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      }
+
+      // Ajouter le token d'authentification s'il est disponible
+      if (authToken) {
+        headers["Authorization"] = `Bearer ${authToken}`
+      }
+
+      const response = await fetch(`/api/entreprises/${entreprise.id}`, {
+        method: "DELETE",
+        headers,
+        credentials: "include", // Inclure les cookies
+        body: JSON.stringify({
+          a2fCode,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Erreur lors de la suppression de l'entreprise")
+      }
+
+      toast({
+        title: "Succès",
+        description: "Entreprise supprimée avec succès",
+      })
+
+      // Fermer les boîtes de dialogue
+      setShowA2FDialog(false)
+      onClose()
+
+      // Rafraîchir la page
+      router.refresh()
+    } catch (error) {
+      console.error("Erreur lors de la suppression de l'entreprise:", error)
+      toast({
+        title: "Erreur",
+        description: error instanceof Error ? error.message : "Erreur lors de la suppression de l'entreprise",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <>
+      <Dialog open={true} onOpenChange={onClose}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Supprimer l'entreprise</DialogTitle>
+            <DialogDescription>
+              Êtes-vous sûr de vouloir supprimer cette entreprise ? Cette action est irréversible.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="py-4">
+            <div className="space-y-2">
+              <p>
+                <strong>Nom :</strong> {entreprise.nom}
+              </p>
+              <p>
+                <strong>Adresse :</strong> {entreprise.adresse}
+              </p>
+              <p>
+                <strong>Téléphone :</strong> {entreprise.telephone}
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={onClose}>
+              Annuler
+            </Button>
+            <Button type="button" variant="destructive" onClick={handleDelete} disabled={isLoading}>
+              {isLoading ? "Suppression en cours..." : "Supprimer"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {showA2FDialog && (
+        <A2FVerificationDialog
+          onVerify={handleA2FVerification}
+          onCancel={() => setShowA2FDialog(false)}
+          isLoading={isLoading}
+        />
+      )}
+    </>
+  )
+}

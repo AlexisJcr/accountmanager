@@ -11,19 +11,21 @@ import { Label } from "@/ui/design-system/label"
 import { useToast } from "@/hooks/use-toast"
 import { A2FVerificationDialog } from "@/ui/components/Auth/a2f-verification-dialog"
 import { Building } from "lucide-react"
+import type { Entreprise } from "@/lib/db/schema"
 
-interface AddEnterpriseDialogProps {
+interface EditEnterpriseDialogProps {
+  entreprise: Entreprise
   onClose: () => void
 }
 
-export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
+export function EditEnterpriseDialog({ entreprise, onClose }: EditEnterpriseDialogProps) {
   const router = useRouter()
   const { toast } = useToast()
 
-  const [nom, setNom] = useState("")
-  const [adresse, setAdresse] = useState("")
-  const [telephone, setTelephone] = useState("")
-  const [couleur, setCouleur] = useState("#22c55e")
+  const [nom, setNom] = useState(entreprise.nom)
+  const [adresse, setAdresse] = useState(entreprise.adresse)
+  const [telephone, setTelephone] = useState(entreprise.telephone)
+  const [couleur, setCouleur] = useState(entreprise.couleur || "#22c55e")
   const [isLoading, setIsLoading] = useState(false)
   const [showA2FDialog, setShowA2FDialog] = useState(false)
   const [authToken, setAuthToken] = useState<string | null>(null)
@@ -59,10 +61,8 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
         headers["Authorization"] = `Bearer ${authToken}`
       }
 
-      console.log("En-têtes de la requête:", headers)
-
-      const response = await fetch(`/api/entreprises`, {
-        method: "POST",
+      const response = await fetch(`/api/entreprises/${entreprise.id}`, {
+        method: "PUT",
         headers,
         credentials: "include", // Inclure les cookies
         body: JSON.stringify({
@@ -74,16 +74,15 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
         }),
       })
 
-
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || "Erreur lors de l'ajout de l'entreprise")
+        throw new Error(data.error || "Erreur lors de la modification de l'entreprise")
       }
 
       toast({
         title: "Succès",
-        description: "Entreprise ajoutée avec succès",
+        description: "Entreprise modifiée avec succès",
       })
 
       // Fermer les boîtes de dialogue
@@ -93,10 +92,10 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
       // Rafraîchir la page
       router.refresh()
     } catch (error) {
-      console.error("Erreur lors de l'ajout de l'entreprise:", error)
+      console.error("Erreur lors de la modification de l'entreprise:", error)
       toast({
         title: "Erreur",
-        description: error instanceof Error ? error.message : "Erreur lors de l'ajout de l'entreprise",
+        description: error instanceof Error ? error.message : "Erreur lors de la modification de l'entreprise",
         variant: "destructive",
       })
     } finally {
@@ -109,7 +108,7 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
       <Dialog open={true} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Ajouter une nouvelle entreprise</DialogTitle>
+            <DialogTitle>Modifier l'entreprise</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-4 py-4">
@@ -148,7 +147,7 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
                 Annuler
               </Button>
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Ajout en cours..." : "Ajouter"}
+                {isLoading ? "Modification en cours..." : "Modifier"}
               </Button>
             </DialogFooter>
           </form>
