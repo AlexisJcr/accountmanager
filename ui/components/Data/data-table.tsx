@@ -5,8 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/ui/design-system/button"
 import { Edit, Trash2, Eye, EyeOff } from "lucide-react"
 import type { Data } from "@/lib/db/schema"
-import { EditDataDialog } from "@/ui/components/edit-data-dialog"
-import { DeleteDataDialog } from "@/ui/components/delete-data-dialog"
+import { EditDataDialog } from "@/ui/components/Data/edit-data-dialog"
+import { DeleteDataDialog } from "@/ui/components/Data/delete-data-dialog"
 
 interface DataTableProps {
   data: Data[]

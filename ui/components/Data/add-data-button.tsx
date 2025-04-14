@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/ui/design-system/button"
 import { Plus } from "lucide-react"
-import { AddDataDialog } from "@/ui/components/add-data-dialog"
+import { AddDataDialog } from "@/ui/components/Data/add-data-dialog"
 
 interface AddDataButtonProps {
   entrepriseId: number

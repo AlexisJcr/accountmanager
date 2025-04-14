@@ -1,4 +1,4 @@
-import { LoginForm } from "@/ui/components/login-form"
+import { LoginForm } from "@/ui/components/Auth/login-form"
 import { db, entrepriseTable } from "@/lib/db/schema"
 
 export default async function LoginPage() {

@@ -2,35 +2,37 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/ui/design-system/dialog"
 import { Button } from "@/ui/design-system/button"
 import { Input } from "@/ui/design-system/input"
 import { Label } from "@/ui/design-system/label"
 import { useToast } from "@/hooks/use-toast"
-import { A2FVerificationDialog } from "@/ui/components/a2f-verification-dialog"
+import { A2FVerificationDialog } from "@/ui/components/Auth/a2f-verification-dialog"
 
-interface AddEnterpriseDialogProps {
+interface AddDataDialogProps {
+  entrepriseId: number
   onClose: () => void
 }
 
-export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
+export function AddDataDialog({ entrepriseId, onClose }: AddDataDialogProps) {
   const router = useRouter()
   const { toast } = useToast()
 
   const [nom, setNom] = useState("")
-  const [adresse, setAdresse] = useState("")
-  const [telephone, setTelephone] = useState("")
+  const [prenom, setPrenom] = useState("")
+  const [typeInfo, setTypeInfo] = useState("")
+  const [identifiant, setIdentifiant] = useState("")
+  const [motDePasse, setMotDePasse] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showA2FDialog, setShowA2FDialog] = useState(false)
-  const [authToken, setAuthToken] = useState<string | null>(null)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
     // Vérifier que tous les champs sont remplis
-    if (!nom || !adresse || !telephone) {
+    if (!nom || !prenom || !typeInfo || !identifiant || !motDePasse) {
       toast({
         title: "Erreur",
         description: "Tous les champs sont requis",
@@ -47,26 +49,18 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
     setIsLoading(true)
 
     try {
-      // Préparer les en-têtes avec le token d'authentification
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-      }
-
-      // Ajouter le token d'authentification s'il est disponible
-      if (authToken) {
-        headers["Authorization"] = `Bearer ${authToken}`
-      }
-
-      console.log("En-têtes de la requête:", headers)
-
-      const response = await fetch(`/api/entreprises`, {
+      const response = await fetch(`/api/entreprises/${entrepriseId}/data`, {
         method: "POST",
-        headers,
-        credentials: "include", // Inclure les cookies
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
         body: JSON.stringify({
           nom,
-          adresse,
-          telephone,
+          prenom,
+          typeInfo,
+          identifiant,
+          motDePasse,
           a2fCode,
         }),
       })
@@ -74,12 +68,12 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || "Erreur lors de l'ajout de l'entreprise")
+        throw new Error(data.error || "Erreur lors de l'ajout de la donnée")
       }
 
       toast({
         title: "Succès",
-        description: "Entreprise ajoutée avec succès",
+        description: "Donnée ajoutée avec succès",
       })
 
       // Fermer les boîtes de dialogue
@@ -89,10 +83,10 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
       // Rafraîchir la page
       router.refresh()
     } catch (error) {
-      console.error("Erreur lors de l'ajout de l'entreprise:", error)
+      console.error("Erreur lors de l'ajout de la donnée:", error)
       toast({
         title: "Erreur",
-        description: error instanceof Error ? error.message : "Erreur lors de l'ajout de l'entreprise",
+        description: error instanceof Error ? error.message : "Erreur lors de l'ajout de la donnée",
         variant: "destructive",
       })
     } finally {
@@ -105,23 +99,41 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
       <Dialog open={true} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Ajouter une nouvelle entreprise</DialogTitle>
+            <DialogTitle>Ajouter une nouvelle donnée</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="nom">Nom de l'entreprise</Label>
-              <Input id="nom" value={nom} onChange={(e) => setNom(e.target.value)} required />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="nom">Nom</Label>
+                <Input id="nom" value={nom} onChange={(e) => setNom(e.target.value)} required />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="prenom">Prénom</Label>
+                <Input id="prenom" value={prenom} onChange={(e) => setPrenom(e.target.value)} required />
+              </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="adresse">Adresse</Label>
-              <Input id="adresse" value={adresse} onChange={(e) => setAdresse(e.target.value)} required />
+              <Label htmlFor="typeInfo">Type d'information</Label>
+              <Input id="typeInfo" value={typeInfo} onChange={(e) => setTypeInfo(e.target.value)} required />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="telephone">Téléphone</Label>
-              <Input id="telephone" value={telephone} onChange={(e) => setTelephone(e.target.value)} required />
+              <Label htmlFor="identifiant">Identifiant</Label>
+              <Input id="identifiant" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} required />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="motDePasse">Mot de passe</Label>
+              <Input
+                id="motDePasse"
+                type="password"
+                value={motDePasse}
+                onChange={(e) => setMotDePasse(e.target.value)}
+                required
+              />
             </div>
 
             <DialogFooter>

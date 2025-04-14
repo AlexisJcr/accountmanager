@@ -3,8 +3,8 @@ import { db, entrepriseTable, dataTable } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { getCurrentUser } from "@/lib/auth"
 import { Navbar } from "@/ui/components/navbar"
-import { DataTable } from "@/ui/components/data-table"
-import { AddDataButton } from "@/ui/components/add-data-button"
+import { DataTable } from "@/ui/components/Data/data-table"
+import { AddDataButton } from "@/ui/components/Data/add-data-button"
 
 export default async function EnterprisePage({
   params,

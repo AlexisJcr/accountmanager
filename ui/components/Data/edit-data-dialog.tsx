@@ -9,7 +9,7 @@ import { Button } from "@/ui/design-system/button"
 import { Input } from "@/ui/design-system/input"
 import { Label } from "@/ui/design-system/label"
 import { useToast } from "@/hooks/use-toast"
-import { A2FVerificationDialog } from "@/ui/components/a2f-verification-dialog"
+import { A2FVerificationDialog } from "@/ui/components/Auth/a2f-verification-dialog"
 import type { Data } from "@/lib/db/schema"
 
 interface EditDataDialogProps {

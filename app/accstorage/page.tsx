@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth"
 import { db, entrepriseTable } from "@/lib/db/schema"
-import { EnterpriseGrid } from "@/ui/components/entreprise-grid"
+import { EnterpriseGrid } from "@/ui/components/Entreprise/entreprise-grid"
 import { Navbar } from "@/ui/components/navbar"
-import { AddEnterpriseButton } from "@/ui/components/add-entreprise-button"
+import { AddEnterpriseButton } from "@/ui/components/Entreprise/add-entreprise-button"
 
 export default async function AccStoragePage() {
   const user = await getCurrentUser()

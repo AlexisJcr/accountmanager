@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/ui/design-system/button"
 import { Plus } from "lucide-react"
-import { AddEnterpriseDialog } from "@/ui/components/add-entreprise-dialog"
+import { AddEnterpriseDialog } from "@/ui/components/Entreprise/add-entreprise-dialog"
 
 export function AddEnterpriseButton() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)

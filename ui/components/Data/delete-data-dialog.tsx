@@ -12,7 +12,7 @@ import {
 } from "@/ui/design-system/dialog"
 import { Button } from "@/ui/design-system/button"
 import { useToast } from "@/hooks/use-toast"
-import { A2FVerificationDialog } from "@/ui/components/a2f-verification-dialog"
+import { A2FVerificationDialog } from "@/ui/components/Auth/a2f-verification-dialog"
 import type { Data } from "@/lib/db/schema"
 
 interface DeleteDataDialogProps {
