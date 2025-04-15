@@ -17,7 +17,7 @@ export default async function AccStoragePage() {
   const entreprises = await db.select().from(entrepriseTable)
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
+    <div className="min-h-screen flex flex-col bg-gray-200">
       <Navbar title="Gestionnaire de Comptes" showBackButton={true} backUrl="/" />
 
       <main className="flex-1 container mx-auto py-8 px-4">

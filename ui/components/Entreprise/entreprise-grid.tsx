@@ -21,7 +21,7 @@ export function EnterpriseGrid({ entreprises }: EnterpriseGridProps) {
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {entreprises.map((entreprise) => (
-          <Card key={entreprise.id} className="hover:shadow-lg transition-shadow h-full">
+          <Card key={entreprise.id} className="hover:shadow-md hover:shadow-gray-400 transition-shadow h-full">
           <CardContent className="flex flex-col items-center justify-between p-6 h-full">
             <div className="flex flex-col items-center">
               <Building

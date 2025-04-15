@@ -114,7 +114,7 @@ export function DeleteEnterpriseDialog({ entreprise, onClose }: DeleteEnterprise
             <Button type="button" variant="outline" onClick={onClose}>
               Annuler
             </Button>
-            <Button type="button" variant="destructive" onClick={handleDelete} disabled={isLoading}>
+            <Button type="button" variant="default" onClick={handleDelete} disabled={isLoading}>
               {isLoading ? "Suppression en cours..." : "Supprimer"}
             </Button>
           </DialogFooter>

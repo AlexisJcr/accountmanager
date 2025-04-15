@@ -3,12 +3,13 @@ import { db, dataTable, entrepriseTable } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { getCurrentUser } from "@/lib/auth"
 import { verifyA2FCode } from "@/lib/a2f"
-import bcrypt from "bcryptjs"
+import { encrypt, decrypt } from "@/lib/crypto"
 
 export const runtime = 'nodejs';
 
 // Récupérer les données d'une entreprise
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+  console.log("=== Lancement méthode GET ===")
   try {
     const { id } = await params
 
@@ -31,8 +32,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     // Masquer les mots de passe dans la réponse
     const safeData = data.map((item) => ({
       ...item,
-      motDePasse: "••••••••", // Masquer le mot de passe
+      nom: decrypt(item.nom),
+      prenom: decrypt(item.prenom),
+      identifiant: decrypt(item.identifiant),
+      motDePasse: decrypt(item.motDePasse),
     }))
+
+    console.log(safeData)
 
     return NextResponse.json({
       success: true,
@@ -53,12 +59,12 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const entrepriseId = Number.parseInt(id)
     const { nom, prenom, typeInfo, identifiant, motDePasse, a2fCode } = await request.json()
 
-    // Vérifier les données requises
+    //Vérifier les données requises
     if (!nom || !prenom || !typeInfo || !identifiant || !motDePasse || !a2fCode) {
       return NextResponse.json({ error: "Tous les champs sont requis" }, { status: 400 })
     }
 
-    // Vérifier si l'utilisateur est authentifié
+    //Vérifier si l'utilisateur est authentifié
     const currentUser = await getCurrentUser()
     console.log('Utilisateur actuel:', currentUser)
 
@@ -66,31 +72,33 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
     }
 
-    // Vérifier le code A2F
+    //Vérifier le code A2F
     const isA2FValid = await verifyA2FCode(a2fCode)
 
     if (!isA2FValid) {
       return NextResponse.json({ error: "Code de vérification incorrect" }, { status: 401 })
     }
 
-    // Vérifier si l'entreprise existe
+    //Vérifier si l'entreprise existe
     const entreprise = await db.select().from(entrepriseTable).where(eq(entrepriseTable.id, entrepriseId)).limit(1)
 
     if (entreprise.length === 0) {
       return NextResponse.json({ error: "Entreprise non trouvée" }, { status: 404 })
     }
 
-    // Hasher le mot de passe
-    const hashedPassword = await bcrypt.hash(motDePasse, 10)
+    //Cryptage des données
+    const encryptedNom = encrypt(nom)
+    const encryptedPrenom = encrypt(prenom)
+    const encryptedId = encrypt(identifiant)
+    const encryptedPassword = encrypt(motDePasse)
 
-    // Ajouter la nouvelle donnée
     await db.insert(dataTable).values({
-      nom,
-      prenom,
+      nom: encryptedNom,
+      prenom: encryptedPrenom,
       entrepriseId,
       typeInfo,
-      identifiant,
-      motDePasse: hashedPassword,
+      identifiant: encryptedId,
+      motDePasse: encryptedPassword,
     })
 
     return NextResponse.json({

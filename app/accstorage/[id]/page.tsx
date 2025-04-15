@@ -1,3 +1,4 @@
+
 import { notFound } from "next/navigation"
 import { db, entrepriseTable, dataTable } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
@@ -5,22 +6,17 @@ import { getCurrentUser } from "@/lib/auth"
 import { Navbar } from "@/ui/components/navbar"
 import { DataTable } from "@/ui/components/Data/data-table"
 import { AddDataButton } from "@/ui/components/Data/add-data-button"
+import { decrypt } from "@/lib/crypto"
 
-export default async function EnterprisePage({
-  params,
-}: {
-  params: { id: string }
-}) {
-  // Attendre la résolution des params
-  const { id } = await params
 
+export default async function EnterprisePage({ params }: { params: { id: string } }) {
   const user = await getCurrentUser()
 
   if (!user) {
     return notFound()
   }
 
-  const entrepriseId = Number.parseInt(id)
+  const entrepriseId = Number.parseInt(params.id)
 
   if (isNaN(entrepriseId)) {
     return notFound()
@@ -33,11 +29,15 @@ export default async function EnterprisePage({
     return notFound()
   }
 
-  // Récupérer les données de l'entreprise
-  const data = await db.select().from(dataTable).where(eq(dataTable.entrepriseId, entrepriseId))
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/entreprises/${entrepriseId}/data`)
+  const result = await response.json()
+
+  if (!response.ok) {
+    return notFound()
+  }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
+    <div className="min-h-screen flex flex-col bg-gray-200">
       <Navbar title={entreprise[0].nom} showBackButton={true} backUrl="/accstorage" icon="Building" />
 
       <main className="flex-1 container mx-auto py-8 px-4">
@@ -46,7 +46,7 @@ export default async function EnterprisePage({
           <AddDataButton entrepriseId={entrepriseId} />
         </div>
 
-        <DataTable data={data} entrepriseId={entrepriseId} />
+        <DataTable data={result.data} entrepriseId={entrepriseId} />
       </main>
     </div>
   )

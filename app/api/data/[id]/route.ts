@@ -3,11 +3,14 @@ import { db, dataTable } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { getCurrentUser } from "@/lib/auth"
 import { verifyA2FCode } from "@/lib/a2f"
-import bcrypt from "bcryptjs"
+import { encrypt } from "@/lib/crypto"
 
 export const runtime = 'nodejs';
 
-// Mettre à jour une donnée
+//=======================================//
+//=== Système Mise à jour des données ===//
+//=======================================//
+
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const dataId = Number.parseInt(params.id)
@@ -18,42 +21,47 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: "Tous les champs sont requis" }, { status: 400 })
     }
 
-    // Vérifier si l'utilisateur est authentifié
+    //Vérification de l'authentification de l'utilisateur
     const currentUser = await getCurrentUser()
 
     if (!currentUser) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
     }
 
-    // Vérifier le code A2F
+    //Vérification du A2F
     const isA2FValid = await verifyA2FCode(a2fCode)
 
     if (!isA2FValid) {
       return NextResponse.json({ error: "Code de vérification incorrect" }, { status: 401 })
     }
 
-    // Vérifier si la donnée existe
+    //Vérification que la donnée existe
     const existingData = await db.select().from(dataTable).where(eq(dataTable.id, dataId)).limit(1)
 
     if (existingData.length === 0) {
       return NextResponse.json({ error: "Donnée non trouvée" }, { status: 404 })
     }
 
-    // Préparer les données à mettre à jour
+    //Encryption des données
+    const encryptedNom = encrypt(nom)
+    const encryptedPrenom = encrypt(prenom)
+    const encryptedId = encrypt(identifiant)
+
+    // Préparer l'objet à mettre à jour
     const updateData: any = {
-      nom,
-      prenom,
+      nom: encryptedNom,
+      prenom: encryptedPrenom,
       typeInfo,
-      identifiant,
+      identifiant: encryptedId,
       updatedAt: new Date(),
     }
 
-    // Si un nouveau mot de passe est fourni, le hasher
+    //Encryption du mot de passe séparément
     if (motDePasse) {
-      updateData.motDePasse = await bcrypt.hash(motDePasse, 10)
+      updateData.motDePasse = encrypt(motDePasse)
     }
 
-    // Mettre à jour la donnée
+    //Mise à jour de la BDD
     await db.update(dataTable).set(updateData).where(eq(dataTable.id, dataId))
 
     return NextResponse.json({
@@ -84,7 +92,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
     }
 
-    // Vérifier le code A2F
+    //Vérification du A2F
     const isA2FValid = await verifyA2FCode(a2fCode)
 
     if (!isA2FValid) {

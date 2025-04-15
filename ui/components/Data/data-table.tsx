@@ -28,7 +28,7 @@ export function DataTable({ data, entrepriseId }: DataTableProps) {
 
   return (
     <>
-      <div className="rounded-md border">
+      <div>
         <Table>
           <TableHeader>
             <TableRow>
@@ -43,7 +43,7 @@ export function DataTable({ data, entrepriseId }: DataTableProps) {
           <TableBody>
             {data.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-6 text-gray-500">
+                <TableCell colSpan={6} className="text-center py-6 text-gray-700">
                   Aucune donnée disponible
                 </TableCell>
               </TableRow>
