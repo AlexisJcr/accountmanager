@@ -11,11 +11,13 @@ import { AddDataButton } from "@/ui/components/Data/add-data-button"
 import { ExportDataButton } from "@/ui/components/Export/export-data-button"
 import { ImportDataButton } from "@/ui/components/Import/import-data-button"
 
+export default async function EnterprisePage({ params }: {
+  params: { id: string }
+}) {
+  const { id } = params
 
-export default async function EnterprisePage({ params }: { params: { id: string } }) {
   const user = await getCurrentUser()
 
-  const { id } = await params
   const entrepriseId = Number.parseInt(id)
 
   if (!user) {
