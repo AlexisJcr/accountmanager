@@ -32,7 +32,7 @@ export const entrepriseTable = pgTable("entreprise", {
   id: serial("id").primaryKey(),
   nom: varchar("nom", { length: 255 }).notNull().unique(),
   adresse: varchar("adresse", { length: 255 }).notNull(),
-  telephone: varchar("telephone", { length: 20 }).notNull(),
+  telephone: varchar("telephone", { length: 100 }).notNull(),
   couleur: varchar("couleur", { length: 20 }).default("#22c55e"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

@@ -32,7 +32,7 @@ export function LoginForm() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    console.log(identifiant, motDePasse);
+
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
@@ -101,7 +101,7 @@ export function LoginForm() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>ENERGIX AccStorage</CardTitle>
+        <CardTitle>ENERGIX Gestionnaire de Comptes</CardTitle>
         <CardDescription>
           {step === "login"
             ? "Connectez-vous pour accéder au gestionnaire de comptes"
@@ -148,7 +148,7 @@ export function LoginForm() {
 
       <CardFooter className="flex justify-center">
         <p className="text-sm text-gray-500">
-          {step === "login" ? "Accès réservé aux administrateurs" : "Un code de vérification est requis pour continuer"}
+          ENERGIX - {step === "login" ? "Accès réservé aux administrateurs" : "Un code de vérification est requis pour continuer"}
         </p>
       </CardFooter>
     </Card>

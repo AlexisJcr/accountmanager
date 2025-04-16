@@ -15,8 +15,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Identifiant ou mot de passe incorrect" }, { status: 401 })
     }
 
-    // Ne pas définir de cookie ici, attendre la validation 2FA
-
     return NextResponse.json({
       success: true,
       user: {

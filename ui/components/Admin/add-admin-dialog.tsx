@@ -4,26 +4,27 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/ui/design-system/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@//ui/design-system/dialog"
 import { Button } from "@/ui/design-system/button"
 import { Input } from "@/ui/design-system/input"
 import { Label } from "@/ui/design-system/label"
 import { useToast } from "@/hooks/use-toast"
 import { A2FVerificationDialog } from "@/ui/components/Auth/a2f-verification-dialog"
-import { Building } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@//ui/design-system/select"
 
-interface AddEnterpriseDialogProps {
+interface AddAdminDialogProps {
   onClose: () => void
 }
 
-export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
+export function AddAdminDialog({ onClose }: AddAdminDialogProps) {
   const router = useRouter()
   const { toast } = useToast()
 
   const [nom, setNom] = useState("")
-  const [adresse, setAdresse] = useState("")
-  const [telephone, setTelephone] = useState("")
-  const [couleur, setCouleur] = useState("#22c55e")
+  const [prenom, setPrenom] = useState("")
+  const [identifiant, setIdentifiant] = useState("")
+  const [motDePasse, setMotDePasse] = useState("")
+  const [role, setRole] = useState("sous-admin")
   const [isLoading, setIsLoading] = useState(false)
   const [showA2FDialog, setShowA2FDialog] = useState(false)
 
@@ -31,7 +32,7 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
     e.preventDefault()
 
     // Vérifier que tous les champs sont remplis
-    if (!nom || !adresse || !telephone) {
+    if (!nom || !prenom || !identifiant || !motDePasse || !role) {
       toast({
         title: "Erreur",
         description: "Tous les champs sont requis",
@@ -53,31 +54,29 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
         "Content-Type": "application/json",
       }
 
-      console.log("En-têtes de la requête:", headers)
-
-      const response = await fetch(`/api/entreprises`, {
+      const response = await fetch(`/api/admin`, {
         method: "POST",
         headers,
-        credentials: "include", // Inclure les cookies
+        credentials: "include",
         body: JSON.stringify({
           nom,
-          adresse,
-          telephone,
-          couleur,
+          prenom,
+          identifiant,
+          motDePasse,
+          role,
           a2fCode,
         }),
       })
 
-
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || "Erreur lors de l'ajout de l'entreprise")
+        throw new Error(data.error || "Erreur lors de l'ajout de l'administrateur")
       }
 
       toast({
         title: "Succès",
-        description: "Entreprise ajoutée avec succès",
+        description: "Administrateur ajouté avec succès",
       })
 
       // Fermer les boîtes de dialogue
@@ -87,10 +86,10 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
       // Rafraîchir la page
       router.refresh()
     } catch (error) {
-      console.error("Erreur lors de l'ajout de l'entreprise:", error)
+      console.error("Erreur lors de l'ajout de l'administrateur:", error)
       toast({
         title: "Erreur",
-        description: error instanceof Error ? error.message : "Erreur lors de l'ajout de l'entreprise",
+        description: error instanceof Error ? error.message : "Erreur lors de l'ajout de l'administrateur",
         variant: "destructive",
       })
     } finally {
@@ -103,38 +102,48 @@ export function AddEnterpriseDialog({ onClose }: AddEnterpriseDialogProps) {
       <Dialog open={true} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Ajouter une nouvelle entreprise</DialogTitle>
+            <DialogTitle>Ajouter un nouvel administrateur</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="nom">Nom de l'entreprise</Label>
-              <Input id="nom" value={nom} onChange={(e) => setNom(e.target.value)} required />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="adresse">Adresse</Label>
-              <Input id="adresse" value={adresse} onChange={(e) => setAdresse(e.target.value)} required />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="telephone">Téléphone</Label>
-              <Input id="telephone" value={telephone} onChange={(e) => setTelephone(e.target.value)} required />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="couleur">Couleur de l'icône</Label>
-              <div className="flex items-center space-x-4">
-                <Input
-                  id="couleur"
-                  type="color"
-                  value={couleur}
-                  onChange={(e) => setCouleur(e.target.value)}
-                  className="w-16 h-10 p-1"
-                />
-                <Building className="h-8 w-8" style={{ color: couleur }} />
-                <span className="text-sm">{couleur}</span>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="nom">Nom</Label>
+                <Input id="nom" value={nom} onChange={(e) => setNom(e.target.value)} required />
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="prenom">Prénom</Label>
+                <Input id="prenom" value={prenom} onChange={(e) => setPrenom(e.target.value)} required />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="identifiant">Identifiant</Label>
+              <Input id="identifiant" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} required />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="motDePasse">Mot de passe</Label>
+              <Input
+                id="motDePasse"
+                type="password"
+                value={motDePasse}
+                onChange={(e) => setMotDePasse(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="role">Rôle</Label>
+              <Select value={role} onValueChange={setRole}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionner un rôle" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="sous-admin">Sous-admin</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <DialogFooter>

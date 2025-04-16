@@ -9,7 +9,6 @@ export const runtime = 'nodejs';
 
 // Récupérer les données d'une entreprise
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-  console.log("=== Lancement méthode GET ===")
   try {
     const { id } = await params
 
@@ -29,7 +28,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     // Récupérer les données de l'entreprise
     const data = await db.select().from(dataTable).where(eq(dataTable.entrepriseId, entrepriseId))
 
-    // Masquer les mots de passe dans la réponse
     const safeData = data.map((item) => ({
       ...item,
       nom: decrypt(item.nom),
@@ -37,8 +35,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       identifiant: decrypt(item.identifiant),
       motDePasse: decrypt(item.motDePasse),
     }))
-
-    console.log(safeData)
 
     return NextResponse.json({
       success: true,
@@ -52,11 +48,11 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 }
 
 // Ajouter une nouvelle donnée
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, context: { params: { id: string } }) {
   try {
-    const { id } = await params
 
-    const entrepriseId = Number.parseInt(id)
+    const entrepriseId = Number.parseInt(context.params.id)
+
     const { nom, prenom, typeInfo, identifiant, motDePasse, a2fCode } = await request.json()
 
     //Vérifier les données requises

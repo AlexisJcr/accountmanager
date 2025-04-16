@@ -6,7 +6,6 @@ import { getCurrentUser } from "@/lib/auth"
 import { verifyA2FCode } from "@/lib/a2f"
 import { sql } from "drizzle-orm"
 
-import { useToast } from "@/hooks/use-toast"
 
 export const runtime = "nodejs"
 
@@ -110,9 +109,10 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 //=== SUPRESSION ENTREPRISE ===//
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, context: { params: { id: string } }) {
+
   try {
-    const entrepriseId = Number.parseInt(params.id)
+    const entrepriseId = Number.parseInt(context.params.id)
     const { a2fCode } = await request.json()
 
     if (isNaN(entrepriseId)) {

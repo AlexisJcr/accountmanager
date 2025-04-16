@@ -13,22 +13,38 @@ import {
 import { Button } from "@/ui/design-system/button"
 import { useToast } from "@/hooks/use-toast"
 import { A2FVerificationDialog } from "@/ui/components/Auth/a2f-verification-dialog"
-import type { Entreprise } from "@/lib/db/schema"
 
-interface DeleteEnterpriseDialogProps {
-  entreprise: Entreprise
+interface Admin {
+  id: number
+  nom: string
+  prenom: string
+  identifiant: string
+  role: string
+}
+
+interface DeleteAdminDialogProps {
+  admin: Admin
   onClose: () => void
 }
 
-export function DeleteEnterpriseDialog({ entreprise, onClose }: DeleteEnterpriseDialogProps) {
+export function DeleteAdminDialog({ admin, onClose }: DeleteAdminDialogProps) {
   const router = useRouter()
   const { toast } = useToast()
 
   const [isLoading, setIsLoading] = useState(false)
   const [showA2FDialog, setShowA2FDialog] = useState(false)
-  const [authToken, setAuthToken] = useState<string | null>(null)
 
   const handleDelete = () => {
+    // Vérifier si c'est le compte superadmin
+    if (admin.role === "superadmin") {
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer le compte superadmin",
+        variant: "destructive",
+      })
+      return
+    }
+
     // Ouvrir la boîte de dialogue de vérification A2F
     setShowA2FDialog(true)
   }
@@ -42,12 +58,7 @@ export function DeleteEnterpriseDialog({ entreprise, onClose }: DeleteEnterprise
         "Content-Type": "application/json",
       }
 
-      // Ajouter le token d'authentification s'il est disponible
-      if (authToken) {
-        headers["Authorization"] = `Bearer ${authToken}`
-      }
-
-      const response = await fetch(`/api/entreprises/${entreprise.id}`, {
+      const response = await fetch(`/api/admin/${admin.id}`, {
         method: "DELETE",
         headers,
         credentials: "include", // Inclure les cookies
@@ -59,12 +70,12 @@ export function DeleteEnterpriseDialog({ entreprise, onClose }: DeleteEnterprise
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || "Erreur lors de la suppression de l'entreprise")
+        throw new Error(data.error || "Erreur lors de la suppression de l'administrateur")
       }
 
       toast({
         title: "Succès",
-        description: "Entreprise supprimée avec succès",
+        description: "Administrateur supprimé avec succès",
       })
 
       // Fermer les boîtes de dialogue
@@ -74,10 +85,10 @@ export function DeleteEnterpriseDialog({ entreprise, onClose }: DeleteEnterprise
       // Rafraîchir la page
       router.refresh()
     } catch (error) {
-      console.error("Erreur lors de la suppression de l'entreprise:", error)
+      console.error("Erreur lors de la suppression de l'administrateur:", error)
       toast({
         title: "Erreur",
-        description: error instanceof Error ? error.message : "Erreur lors de la suppression de l'entreprise",
+        description: error instanceof Error ? error.message : "Erreur lors de la suppression de l'administrateur",
         variant: "destructive",
       })
     } finally {
@@ -90,23 +101,25 @@ export function DeleteEnterpriseDialog({ entreprise, onClose }: DeleteEnterprise
       <Dialog open={true} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Supprimer l'entreprise</DialogTitle>
+            <DialogTitle>Supprimer l'administrateur</DialogTitle>
             <DialogDescription>
-              Êtes-vous sûr de vouloir supprimer cette entreprise ? Cette action est irréversible.
-              <h1 className="text-red-600 text-sm font-normal mt-2">Une sécurité est installée pour les entreprises ayant toujours des données liées.</h1>
+              Êtes-vous sûr de vouloir supprimer cet administrateur ? Cette action est irréversible.
             </DialogDescription>
           </DialogHeader>
 
           <div className="py-4">
             <div className="space-y-2">
               <p>
-                <strong>Nom :</strong> {entreprise.nom}
+                <strong>Nom :</strong> {admin.nom}
               </p>
               <p>
-                <strong>Adresse :</strong> {entreprise.adresse}
+                <strong>Prénom :</strong> {admin.prenom}
               </p>
               <p>
-                <strong>Téléphone :</strong> {entreprise.telephone}
+                <strong>Identifiant :</strong> {admin.identifiant}
+              </p>
+              <p>
+                <strong>Rôle :</strong> {admin.role}
               </p>
             </div>
           </div>
@@ -115,7 +128,12 @@ export function DeleteEnterpriseDialog({ entreprise, onClose }: DeleteEnterprise
             <Button type="button" variant="outline" onClick={onClose}>
               Annuler
             </Button>
-            <Button type="button" variant="default" onClick={handleDelete} disabled={isLoading}>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isLoading || admin.role === "superadmin"}
+            >
               {isLoading ? "Suppression en cours..." : "Supprimer"}
             </Button>
           </DialogFooter>

@@ -81,7 +81,7 @@ export function DeleteDataDialog({ data, onClose }: DeleteDataDialogProps) {
       <Dialog open={true} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Supprimer la donnée</DialogTitle>
+            <DialogTitle className="text-red-600">Supprimer la donnée</DialogTitle>
             <DialogDescription>
               Êtes-vous sûr de vouloir supprimer cette donnée ? Cette action est irréversible.
             </DialogDescription>
@@ -108,7 +108,7 @@ export function DeleteDataDialog({ data, onClose }: DeleteDataDialogProps) {
             <Button type="button" variant="outline" onClick={onClose}>
               Annuler
             </Button>
-            <Button type="button" variant="destructive" onClick={handleDelete} disabled={isLoading}>
+            <Button type="button" variant="destructive" className="bg-red-600 text-white" onClick={handleDelete} disabled={isLoading}>
               {isLoading ? "Suppression en cours..." : "Supprimer"}
             </Button>
           </DialogFooter>
