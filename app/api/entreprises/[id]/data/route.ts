@@ -8,11 +8,11 @@ import { encrypt, decrypt } from "@/lib/crypto"
 export const runtime = 'nodejs';
 
 // Récupérer les données d'une entreprise
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
+    const params = await props.params;
+    const entrepriseId = Number.parseInt(params.id)
 
-    const entrepriseId = Number.parseInt(id)
 
     if (isNaN(entrepriseId)) {
       return NextResponse.json({ error: "ID d'entreprise invalide" }, { status: 400 })
