@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation"
 import { db, entrepriseTable, dataTable } from "@/lib/db/schema"
@@ -12,11 +13,17 @@ import { ExportDataButton } from "@/ui/components/Export/export-data-button"
 import { ImportDataButton } from "@/ui/components/Import/import-data-button"
 
 
+type PageParams = {
+  params: {
+    id: string
+  }
+}
+
 export default async function EnterprisePage({ params }: { params: { id: string } }) {
-  const entrepriseId = Number.parseInt(params.id)
+  const awaitedparams = await params
+  const entrepriseId = Number.parseInt(awaitedparams.id)
 
   const user = await getCurrentUser()
-
 
   if (!user) {
     return notFound()
