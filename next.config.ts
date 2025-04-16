@@ -2,10 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   eslint: {
-    ignoreDuringBuilds: true, // Ignorer ESLint
+    ignoreDuringBuilds: true,
   },
   experimental:{
-    allowedDevOrigins: ['http://192.168.1.204'],
+    allowedDevOrigins: ['https://192.168.1.204'],
   },
 };
 

@@ -29,12 +29,12 @@ export default async function AccStoragePage() {
   const entreprises = await db.select().from(entrepriseTable)
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-200">
+    <div className="min-h-screen flex flex-col bg-gray-200 dark:bg-gray-600">
       <Navbar title={`${user.nom} ${user.prenom}`} showBackButton={true} backUrl="/" />
 
       <main className="flex-1 container mx-auto py-8 px-4">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Sélectionnez une entreprise</h1>
+          <h1 className="text-2xl font-bold dark:text-white">Sélectionnez une entreprise</h1>
           <div className="flex space-x-4">
             <div className={`${user.role === "superadmin" ? "" : "hidden"}`}>
             <Link href="/accstorage/admin">

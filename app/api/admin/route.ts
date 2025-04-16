@@ -26,7 +26,6 @@ export async function GET(request: NextRequest) {
         updatedAt: loginTable.updatedAt,
       })
       .from(loginTable)
-    console.log("Admins:", admins)
 
     return NextResponse.json({
       success: true,

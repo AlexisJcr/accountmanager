@@ -19,27 +19,27 @@ export function Navbar({ title, showBackButton = false, backUrl = "/", icon }: N
   const { toast } = useToast()
   const [inactivityTimer, setInactivityTimer] = useState<NodeJS.Timeout | null>(null)
 
-  // Fonction pour réinitialiser le timer d'inactivité
-  const resetInactivityTimer = () => {
-    if (inactivityTimer) {
-      clearTimeout(inactivityTimer)
-    }
+  // // Fonction pour réinitialiser le timer d'inactivité
+  // const resetInactivityTimer = () => {
+  //   if (inactivityTimer) {
+  //     clearTimeout(inactivityTimer)
+  //   }
 
-    // Définir un nouveau timer (15 minutes)
-    const newTimer = setTimeout(
-      () => {
-        handleLogout()
-        toast({
-          title: "Session expirée",
-          description: "Vous avez été déconnecté en raison d'inactivité.",
-          variant: "destructive",
-        })
-      },
-      15 * 60 * 1000,
-    )
+  //   // Définir un nouveau timer (15 minutes)
+  //   const newTimer = setTimeout(
+  //     () => {
+  //       handleLogout()
+  //       toast({
+  //         title: "Session expirée",
+  //         description: "Vous avez été déconnecté en raison d'inactivité.",
+  //         variant: "destructive",
+  //       })
+  //     },
+  //     15 * 60 * 1000,
+  //   )
 
-    setInactivityTimer(newTimer)
-  }
+  //   setInactivityTimer(newTimer)
+  // }
 
   // Gérer la déconnexion
   const handleLogout = async () => {
@@ -57,44 +57,44 @@ export function Navbar({ title, showBackButton = false, backUrl = "/", icon }: N
     }
   }
 
-  // Configurer les écouteurs d'événements pour réinitialiser le timer
-  useEffect(() => {
-    // Initialiser le timer
-    resetInactivityTimer()
+  // // Configurer les écouteurs d'événements pour réinitialiser le timer
+  // useEffect(() => {
+  //   // Initialiser le timer
+  //   resetInactivityTimer()
 
-    // Ajouter des écouteurs d'événements pour réinitialiser le timer
-    const events = ["mousedown", "mousemove", "keypress", "scroll", "touchstart"]
+  //   // Ajouter des écouteurs d'événements pour réinitialiser le timer
+  //   const events = ["mousedown", "mousemove", "keypress", "scroll", "touchstart"]
 
-    const resetTimer = () => {
-      resetInactivityTimer()
-    }
+  //   const resetTimer = () => {
+  //     resetInactivityTimer()
+  //   }
 
-    events.forEach((event) => {
-      window.addEventListener(event, resetTimer)
-    })
+  //   events.forEach((event) => {
+  //     window.addEventListener(event, resetTimer)
+  //   })
 
-    // Nettoyer les écouteurs d'événements
-    return () => {
-      if (inactivityTimer) {
-        clearTimeout(inactivityTimer)
-      }
+  //   // Nettoyer les écouteurs d'événements
+  //   return () => {
+  //     if (inactivityTimer) {
+  //       clearTimeout(inactivityTimer)
+  //     }
 
-      events.forEach((event) => {
-        window.removeEventListener(event, resetTimer)
-      })
-    }
-  }, [])
+  //     events.forEach((event) => {
+  //       window.removeEventListener(event, resetTimer)
+  //     })
+  //   }
+  // }, [])
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-white shadow-sm dark:bg-gray-800">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <h1 className="text-xl font-bold">{title}</h1>
+          <h1 className="text-xl font-bold text-white">{title}</h1>
         </div>
 
         <div className="flex items-center space-x-2">
           {showBackButton && (
-            <Button variant="outline" size="sm" asChild>
+            <Button className="dark:bg-gray-400 hover:dark:bg-gray-500" variant="outline" size="sm" asChild>
               <Link href={backUrl}>
                 <ArrowLeft className="h-4 w-4 mr-1" />
                 Retour
@@ -102,7 +102,7 @@ export function Navbar({ title, showBackButton = false, backUrl = "/", icon }: N
             </Button>
           )}
 
-          <Button variant="ghost" size="sm" onClick={handleLogout}>
+          <Button className="dark:bg-gray-100 hover:dark:bg-gray-300" variant="ghost" size="sm" onClick={handleLogout}>
             <LogOut className="h-4 w-4 mr-1" />
             Déconnexion
           </Button>

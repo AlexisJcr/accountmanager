@@ -37,7 +37,6 @@ export async function POST(request: NextRequest) {
 
      // Vérifier si l'utilisateur est authentifié
      const currentUser = await getCurrentUser()
-     console.log('Utilisateur actuel:', currentUser)
  
      if (!currentUser) {
        return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
