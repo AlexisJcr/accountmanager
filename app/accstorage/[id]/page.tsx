@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import { notFound } from "next/navigation"
 import { db, entrepriseTable, dataTable } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
@@ -20,8 +18,7 @@ type PageParams = {
 }
 
 export default async function EnterprisePage({ params }: { params: { id: string } }) {
-  const awaitedparams = await params
-  const entrepriseId = Number.parseInt(awaitedparams.id)
+  const entrepriseId = Number.parseInt(params.id)
 
   const user = await getCurrentUser()
 

@@ -11,7 +11,8 @@ export const runtime = 'nodejs';
 //=== Système Mise à jour des données ===//
 //=======================================//
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const dataId = Number.parseInt(params.id)
     const { nom, prenom, typeInfo, identifiant, motDePasse, a2fCode } = await request.json()
@@ -75,7 +76,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 // Supprimer une donnée
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const dataId = Number.parseInt(params.id)
     const { a2fCode } = await request.json()

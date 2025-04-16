@@ -10,7 +10,8 @@ import { sql } from "drizzle-orm"
 export const runtime = "nodejs"
 
 //=== DETAILS ENTREPRISE ===//
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const entrepriseId = Number.parseInt(params.id)
 
@@ -37,7 +38,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
 
 //=== MAJ ENTREPRISE ===//
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const entrepriseId = Number.parseInt(params.id)
     const { nom, adresse, telephone, couleur, a2fCode } = await request.json()
@@ -109,10 +111,10 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 //=== SUPRESSION ENTREPRISE ===//
-export async function DELETE(request: NextRequest, context: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
 
   try {
-    const entrepriseId = Number.parseInt(context.params.id)
+    const entrepriseId = Number.parseInt((await context.params).id)
     const { a2fCode } = await request.json()
 
     if (isNaN(entrepriseId)) {

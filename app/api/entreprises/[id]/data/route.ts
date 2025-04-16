@@ -48,10 +48,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 }
 
 // Ajouter une nouvelle donnée
-export async function POST(request: NextRequest, context: { params: { id: string } }) {
+export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
 
-    const entrepriseId = Number.parseInt(context.params.id)
+    const entrepriseId = Number.parseInt((await context.params).id)
 
     const { nom, prenom, typeInfo, identifiant, motDePasse, a2fCode } = await request.json()
 
