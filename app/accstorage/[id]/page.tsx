@@ -11,9 +11,13 @@ import { AddDataButton } from "@/ui/components/Data/add-data-button"
 import { ExportDataButton } from "@/ui/components/Export/export-data-button"
 import { ImportDataButton } from "@/ui/components/Import/import-data-button"
 
-export default async function EnterprisePage({ params }: {
-  params: { id: string }
-}) {
+type Props = {
+  params: {
+    id: string
+  }
+}
+
+export default async function EnterprisePage({ params }: Props) {
   const { id } = params
 
   const user = await getCurrentUser()
