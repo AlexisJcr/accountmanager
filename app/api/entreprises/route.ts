@@ -7,7 +7,6 @@ import { eq } from "drizzle-orm";
 export const runtime = "nodejs"
 
 export async function GET() {
-  console.log("GET /api/entreprises")
   try {
     const entreprises = await db.select().from(entrepriseTable)
 
@@ -23,7 +22,6 @@ export async function GET() {
 
 
 export async function POST(request: NextRequest) {
-  console.log("POST /api/entreprises")
   try {
     // Afficher tous les cookies pour le débogage
     console.log("Cookies dans la requête POST entreprise:", request.cookies.getAll())
