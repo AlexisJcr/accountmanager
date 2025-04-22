@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   basePath: "/accstorage",
+  output: 'standalone',
   eslint: {
     ignoreDuringBuilds: true,
   },
