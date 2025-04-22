@@ -1,38 +1,57 @@
+export const dynamic = "force-dynamic";
+
+import { redirect } from "next/navigation"
+import { getCurrentUser } from "@/lib/auth"
+import { db, entrepriseTable } from "@/lib/db/schema"
+import { EnterpriseGrid } from "@/ui/components/Entreprise/entreprise-grid"
+import { Navbar } from "@/ui/components/navbar"
+import { Footer } from "@/ui/components/footer"
+import { AddEnterpriseButton } from "@/ui/components/Entreprise/add-entreprise-button"
 import Link from "next/link"
-import { Card, CardContent, CardTitle } from "@/ui/design-system/card"
-import { Database, Shield } from "lucide-react"
+import { Button } from "@/ui/design-system/button"
+import { Users } from "lucide-react"
 
-export default function Home() {
+import { ExportEnterprisesButton } from "@/ui/components/Export/export-entreprises-button"
+import { ImportEnterprisesButton } from "@/ui/components/Import/import-entreprises-button"
+
+
+export default async function AccStoragePage() {
+  const user = await getCurrentUser()
+
+  // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
+  if (!user) {
+    redirect("/accstorage/login")
+  }
+  
+  const isSuperAdmin = user.role === "superadmin"
+
+  // Récupérer la liste des entreprises
+  const entreprises = await db.select().from(entrepriseTable)
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-around bg-gray-100">
-      <h1 className="text-3xl font-bold mb-8 text-center">Portail d'Applications</h1>
+    <div className="min-h-screen flex flex-col bg-gray-200 dark:bg-gray-600">
+      <Navbar title={`${user.nom} ${user.prenom}`} showBackButton={true} backUrl="/" />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl px-4">
-        <Link href="http://192.168.1.203/front/central.php" target="_blank" rel="noopener noreferrer">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-            <CardContent className="flex flex-col items-center justify-center p-6 h-full">
-              <Database className="h-16 w-16 mb-4 text-blue-600" />
-              <h2 className="text-2xl text-black font-semibold mb-2">GLPI</h2>
-              <p className="text-center text-primary">
-                Gestion de l'inventaire du parc informatique
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link href="/accstorage">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-            <CardContent className="flex flex-col items-center justify-center p-6 h-full">
-              <Shield className="h-16 w-16 mb-4 text-red-600" />
-              <h2 className="text-2xl text-black font-semibold mb-2">Account Storage</h2>
-              <p className="text-center text-primary">Gestionnaire de comptes et mots de passe</p>
-            </CardContent>
-          </Card>
-        </Link>
-      </div>
-      <footer>
-          SARL ENERGIX - Service Informatique - 2025
-        </footer>
+      <main className="flex-1 container mx-auto py-8 px-4">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold dark:text-white">Sélectionnez une entreprise</h1>
+          <div className="flex space-x-4">
+            <div className={`${user.role === "superadmin" ? "" : "hidden"}`}>
+            <Link href="/accstorage/admin">
+              <Button variant="outline">
+                <Users className="h-4 w-4 mr-2" />
+                Gérer les administrateurs
+              </Button>
+            </Link>
+            </div>
+            <ExportEnterprisesButton isSuperAdmin={isSuperAdmin} />
+            <ImportEnterprisesButton />
+            <AddEnterpriseButton />
+          </div>
+        </div>
+        <EnterpriseGrid entreprises={entreprises} />
+      </main>
+      <Footer />
     </div>
   )
 }
