@@ -28,13 +28,15 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
     // Récupérer les données de l'entreprise
     const data = await db.select().from(dataTable).where(eq(dataTable.entrepriseId, entrepriseId))
 
-    const safeData = data.map((item) => ({
-      ...item,
-      nom: decrypt(item.nom),
-      prenom: decrypt(item.prenom),
-      identifiant: decrypt(item.identifiant),
-      motDePasse: decrypt(item.motDePasse),
-    }))
+    const safeData = data
+  .map((item) => ({
+    ...item,
+    nom: decrypt(item.nom),
+    prenom: decrypt(item.prenom),
+    identifiant: decrypt(item.identifiant),
+    motDePasse: decrypt(item.motDePasse),
+  }))
+  .sort((a, b) => a.nom.localeCompare(b.nom));
 
     return NextResponse.json({
       success: true,

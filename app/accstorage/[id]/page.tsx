@@ -12,6 +12,8 @@ import { AddDataButton } from "@/ui/components/Data/add-data-button"
 import { ExportDataButton } from "@/ui/components/Export/export-data-button"
 import { ImportDataButton } from "@/ui/components/Import/import-data-button"
 
+import { DataSearchBar } from "@/ui/components/Data/data-search-bar"
+
 
 export default async function EnterprisePage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -62,7 +64,7 @@ export default async function EnterprisePage(props: { params: Promise<{ id: stri
           </div>
         </div>
 
-        <DataTable data={result.data} entrepriseId={entrepriseId} />
+        <DataSearchBar data={result.data} entrepriseId={entrepriseId} />
       </main>
       <Footer />
     </div>
