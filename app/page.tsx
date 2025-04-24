@@ -1,5 +1,0 @@
-// app/page.tsx
-export default function Page() {
-    return null; // ou un petit message
-  }
-  
