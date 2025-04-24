@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { verifyTokenEdge } from "./lib/auth-edge" // <-- nouveau import
 
 export async function middleware(request: NextRequest) {
+  console.log("Middleware hit:", request.nextUrl.pathname)
   if (request.nextUrl.pathname.startsWith("/accstorage")) {
     if (
       request.nextUrl.pathname === "/accstorage/login" ||
