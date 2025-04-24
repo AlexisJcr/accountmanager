@@ -20,7 +20,7 @@ export default async function AccStoragePage() {
 
   // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
   if (!user) {
-    redirect("/accstorage/login")
+    redirect("/login")
   }
   
   const isSuperAdmin = user.role === "superadmin"

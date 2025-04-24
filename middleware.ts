@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
   console.log("Middleware hit:", request.nextUrl.pathname)
   if (request.nextUrl.pathname.startsWith("/accstorage")) {
     if (
-      request.nextUrl.pathname === "/accstorage/login" ||
+      request.nextUrl.pathname === "/login" ||
       request.nextUrl.pathname === "/api/auth/login" ||
       request.nextUrl.pathname === "/api/auth/verify-2fa"
     ) {
@@ -15,13 +15,13 @@ export async function middleware(request: NextRequest) {
     const token = request.cookies.get("auth-token")?.value
 
     if (!token) {
-      return NextResponse.redirect(new URL("/accstorage/login", request.url))
+      return NextResponse.redirect(new URL("/login", request.url))
     }
 
     const payload = await verifyTokenEdge(token)
 
     if (!payload) {
-      return NextResponse.redirect(new URL("/accstorage/login", request.url))
+      return NextResponse.redirect(new URL("/login", request.url))
     }
   }
 
