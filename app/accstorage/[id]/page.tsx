@@ -4,15 +4,15 @@ import { notFound } from "next/navigation"
 import { db, entrepriseTable, dataTable } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { getCurrentUser } from "@/lib/auth"
-import { Navbar } from "@/ui/components/navbar"
-import { Footer } from "@/ui/components/footer"
-import { DataTable } from "@/ui/components/Data/data-table"
-import { AddDataButton } from "@/ui/components/Data/add-data-button"
+import { Navbar } from "@/app/ui/components/navbar"
+import { Footer } from "@/app/ui/components/footer"
+import { DataTable } from "@/app/ui/components/Data/data-table"
+import { AddDataButton } from "@/app/ui/components/Data/add-data-button"
 
-import { ExportDataButton } from "@/ui/components/Export/export-data-button"
-import { ImportDataButton } from "@/ui/components/Import/import-data-button"
+import { ExportDataButton } from "@/app/ui/components/Export/export-data-button"
+import { ImportDataButton } from "@/app/ui/components/Import/import-data-button"
 
-import { DataSearchBar } from "@/ui/components/Data/data-search-bar"
+import { DataSearchBar } from "@/app/ui/components/Data/data-search-bar"
 
 
 export default async function EnterprisePage(props: { params: Promise<{ id: string }> }) {

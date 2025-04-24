@@ -4,9 +4,9 @@ import { notFound } from "next/navigation"
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth"
 import { db, loginTable } from "@/lib/db/schema"
-import { Navbar } from "@/ui/components/navbar"
-import { AdminTable } from "@/ui/components/Admin/admin-table"
-import { AddAdminButton } from "@/ui/components/Admin/add-admin-button"
+import { Navbar } from "@/app/ui/components/navbar"
+import { AdminTable } from "@/app/ui/components/Admin/admin-table"
+import { AddAdminButton } from "@/app/ui/components/Admin/add-admin-button"
 
 export default async function AdminsPage() {
   const user = await getCurrentUser()
