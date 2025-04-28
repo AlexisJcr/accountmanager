@@ -3,16 +3,16 @@ export const dynamic = "force-dynamic";
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth"
 import { db, entrepriseTable } from "@/lib/db/schema"
-import { EnterpriseGrid } from "@/app/ui/components/Entreprise/entreprise-grid"
-import { Navbar } from "@/app/ui/components/navbar"
-import { Footer } from "@/app/ui/components/footer"
-import { AddEnterpriseButton } from "@/app/ui/components/Entreprise/add-entreprise-button"
+import { EnterpriseGrid } from "@/ui/components/Entreprise/entreprise-grid"
+import { Navbar } from "@/ui/components/navbar"
+import { Footer } from "@/ui/components/footer"
+import { AddEnterpriseButton } from "@/ui/components/Entreprise/add-entreprise-button"
 import Link from "next/link"
-import { Button } from "@/app/ui/design-system/button"
+import { Button } from "@/ui/design-system/button"
 import { Users } from "lucide-react"
 
-import { ExportEnterprisesButton } from "@/app/ui/components/Export/export-entreprises-button"
-import { ImportEnterprisesButton } from "@/app/ui/components/Import/import-entreprises-button"
+import { ExportEnterprisesButton } from "@/ui/components/Export/export-entreprises-button"
+import { ImportEnterprisesButton } from "@/ui/components/Import/import-entreprises-button"
 
 
 export default async function AccStoragePage() {

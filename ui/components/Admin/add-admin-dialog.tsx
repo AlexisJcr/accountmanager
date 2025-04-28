@@ -4,13 +4,13 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@//ui/design-system/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/ui/design-system/dialog"
 import { Button } from "@/ui/design-system/button"
 import { Input } from "@/ui/design-system/input"
 import { Label } from "@/ui/design-system/label"
 import { useToast } from "@/hooks/use-toast"
 import { A2FVerificationDialog } from "@/ui/components/Auth/a2f-verification-dialog"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@//ui/design-system/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/design-system/select"
 
 interface AddAdminDialogProps {
   onClose: () => void

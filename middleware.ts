@@ -1,29 +1,33 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { verifyTokenEdge } from "./lib/auth-edge" // <-- nouveau import
+import { verifyToken } from "./lib/auth"
 
 export async function middleware(request: NextRequest) {
-  console.log("Middleware hit:", request.nextUrl.pathname)
   if (request.nextUrl.pathname.startsWith("/accstorage")) {
     if (
-      request.nextUrl.pathname === "/login" ||
+      request.nextUrl.pathname === "/accstorage/login" ||
       request.nextUrl.pathname === "/api/auth/login" ||
       request.nextUrl.pathname === "/api/auth/verify-2fa"
     ) {
       return NextResponse.next()
     }
 
+    // Vérifier le token d'authentification
     const token = request.cookies.get("auth-token")?.value
 
     if (!token) {
-      return NextResponse.redirect(new URL("/login", request.url))
+      return NextResponse.redirect(new URL("/accstorage/login", request.url))
     }
 
-    const payload = await verifyTokenEdge(token)
+    const payload = await verifyToken(token)
 
     if (!payload) {
-      return NextResponse.redirect(new URL("/login", request.url))
+      return NextResponse.redirect(new URL("/accstorage/login", request.url))
     }
   }
 
   return NextResponse.next()
+}
+
+export const config = {
+  matcher: ["/accstorage/:path*", "/api/:path*"],
 }
