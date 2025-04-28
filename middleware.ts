@@ -15,13 +15,13 @@ export async function middleware(request: NextRequest) {
     const token = request.cookies.get("auth-token")?.value
 
     if (!token) {
-      return NextResponse.redirect(new URL("/login", request.url))
+      return NextResponse.redirect(new URL("/accstorage/login", request.url))
     }
 
     const payload = await verifyTokenEdge(token)
 
     if (!payload) {
-      return NextResponse.redirect(new URL("/login", request.url))
+      return NextResponse.redirect(new URL("/accstorage/login", request.url))
     }
   }
 

@@ -18,7 +18,6 @@ import { ImportEnterprisesButton } from "@/ui/components/Import/import-entrepris
 export default async function AccStoragePage() {
   const user = await getCurrentUser()
 
-  // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
   if (!user) {
     redirect("/accstorage/login")
   }
